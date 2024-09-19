@@ -159,6 +159,7 @@ export default function PatientIntakeChatbot(): JSX.Element {
   const [input, setInput] = useState("");
   const [patientData, setPatientData] = useState<PatientData>({});
   const [isTyping, setIsTyping] = useState(false);
+  const [isFinished, setIsFinished] = useState(false); // New state to track if intake is finished
 
   const isOptionQuestion = questions[currentQuestion]?.type === "button";
 
@@ -235,8 +236,9 @@ export default function PatientIntakeChatbot(): JSX.Element {
           isUser: false,
         },
       ]);
-      console.log("Patient Data:", patientData);
       setIsTyping(false);
+      setIsFinished(true); // Mark the intake as finished
+      console.log("Patient Data:", patientData);
     }, 1000);
   };
 
@@ -326,35 +328,38 @@ export default function PatientIntakeChatbot(): JSX.Element {
           <div ref={bottomRef}></div>
         </ScrollArea>
       </CardContent>
-      <CardFooter>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
-          className="flex w-full items-center space-x-2"
-        >
-          <Input
-            placeholder={
-              isOptionQuestion
-                ? "Please select an option above"
-                : "Type your message here..."
-            }
-            value={input}
-            onChange={(e: any) => setInput(e.target.value)}
-            className="flex-grow"
-            disabled={isOptionQuestion}
-          />
-          <Button
-            type="submit"
-            size="icon"
-            disabled={isOptionQuestion || !input.trim()}
+      {/* Conditionally render the input field */}
+      {!isFinished && (
+        <CardFooter>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
+            className="flex w-full items-center space-x-2"
           >
-            <Send className="h-4 w-4" />
-            <span className="sr-only">Send</span>
-          </Button>
-        </form>
-      </CardFooter>
+            <Input
+              placeholder={
+                isOptionQuestion
+                  ? "Please select an option above"
+                  : "Type your message here..."
+              }
+              value={input}
+              onChange={(e: any) => setInput(e.target.value)}
+              className="flex-grow"
+              disabled={isOptionQuestion}
+            />
+            <Button
+              type="submit"
+              size="icon"
+              disabled={isOptionQuestion || !input.trim()}
+            >
+              <Send className="h-4 w-4" />
+              <span className="sr-only">Send</span>
+            </Button>
+          </form>
+        </CardFooter>
+      )}
     </Card>
   );
 }

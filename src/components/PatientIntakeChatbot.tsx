@@ -12,7 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Send, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Textarea } from "./ui/textarea";
+import { Input } from "./ui/input";
 interface Question {
   id: string;
   question: string;
@@ -334,7 +334,7 @@ export default function PatientIntakeChatbot(): JSX.Element {
           }}
           className="flex w-full items-center space-x-2"
         >
-          <Textarea
+          <Input
             placeholder={
               isOptionQuestion
                 ? "Please select an option above"
